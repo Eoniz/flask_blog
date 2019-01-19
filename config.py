@@ -1,9 +1,14 @@
 # ********* IS DEBUG ********* 
+import os
+
 DEBUG = True
 
 # ********* BASE DIR ********* 
-import os
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
+# ********* SQLITE ***********
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'app.db')
+DATABASE_CONNECT_OPTIONS = {}
 
 # ********* MAX THREADS ********* 
 THREADS_PER_PAGE = 2
