@@ -21,4 +21,7 @@ def not_found(error):
 from app.mod_auth.controllers import mod_auth
 app.register_blueprint(mod_auth)
 
+from app.mod_blog.controllers import mod_blog
+app.register_blueprint(mod_blog)
+
 db.create_all()
