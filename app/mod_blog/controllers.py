@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, redirect, render_template
 from sqlalchemy import desc
 from app.mod_blog.models import Blog
-from app import app
+from app import app, route
 
 mod_blog = Blueprint('blog', __name__, url_prefix='/')
 
@@ -39,9 +39,10 @@ def format_date(date):
     return f'{date_month} {date_day}, {date_year} at {date_hour}'
 
 
-@mod_blog.route('/')
-@mod_blog.route('/page/<int:page>')
-def index(page=1):
+@route('/')
+@route('/page/<int:page>')
+@route('/page/<int:page>/limit/<int:limit>')
+def index(page=1, limit=10):
     """
     Return the index view with the given page.
     If no page given, the start page will be 1
@@ -49,10 +50,12 @@ def index(page=1):
     params:
         page <int>:
             The current page
+        limit <int>:
+            The number of articles per page
     returns:
         render_template(blog/index.html)
     """
-    limit = 10
+
     offset = limit * (page - 1)
     articles = Blog.query.order_by(desc(Blog.date_modified))\
         .offset(offset).limit(limit)

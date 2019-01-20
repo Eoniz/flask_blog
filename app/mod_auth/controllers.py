@@ -21,7 +21,9 @@ def login():
             flash(f'You are now connected as {user.name}')
             return redirect(url_for('auth.home'))
 
-        flash(f'Wrong email or password', 'error')
+        flash(f'Wrong email or password', 'danger')
+    else:
+        flash(f"Email and/or password is not correct", "danger")
 
     return render_template('auth/signin.html', form=form)
 
