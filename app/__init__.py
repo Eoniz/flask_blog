@@ -1,5 +1,5 @@
 # Imports
-from flask import Flask, render_template
+from flask import Flask, render_template, session, redirect, request
 from flask_sqlalchemy import SQLAlchemy
 
 # App
@@ -16,6 +16,24 @@ db = SQLAlchemy(app)
 @app.errorhandler(404)
 def not_found(error):
     return render_template('404.html'), 404
+
+
+@app.before_request
+def logged_in_required():
+    """
+    Decorator middleware for redirect user when he's not logged in
+    """
+    valid = 'user_id' in session
+
+    if(request.endpoint and 'static' not in request.endpoint and not
+        valid and not getattr(
+            app.view_functions[request.endpoint], 'is_public', False)):
+        return redirect('/auth/login')
+    
+
+def public_endpoint(f):
+    f.is_public = True
+    return f
 
 
 def route(rule, **options):

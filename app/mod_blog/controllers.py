@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, request, redirect, render_template
 from sqlalchemy import desc
 from app.mod_blog.models import Blog
-from app import app, route
+from app import app, route, public_endpoint
 from app.mod_blog.forms import WriteArticle
 
 mod_blog = Blueprint('blog', __name__, url_prefix='/')
@@ -40,6 +40,7 @@ def format_date(date):
     return f'{date_month} {date_day}, {date_year} at {date_hour}'
 
 
+@public_endpoint
 @route('/')
 @route('/page/<int:page>')
 @route('/page/<int:page>/limit/<int:limit>')

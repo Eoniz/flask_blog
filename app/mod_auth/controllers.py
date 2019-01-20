@@ -1,13 +1,14 @@
 from flask import Blueprint, request, render_template, \
     flash, g, session, redirect, url_for
 from werkzeug import check_password_hash, generate_password_hash
-from app import db
+from app import db, public_endpoint
 from app.mod_auth.forms import LoginForm
 from app.mod_auth.models import User
 
 mod_auth = Blueprint('auth', __name__, url_prefix='/auth')
 
 
+@public_endpoint
 @mod_auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm(request.form)
@@ -27,6 +28,7 @@ def login():
     return render_template('auth/signin.html', form=form)
 
 
+@public_endpoint
 @mod_auth.route('/logout')
 def logout():
     session.pop('user_id', None)
