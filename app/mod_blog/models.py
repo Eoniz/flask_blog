@@ -13,7 +13,7 @@ class Base(db.Model):
 
 
 class Blog(Base):
-    __tablename__ = 'blog'
+    __tablename__ = 'blog_article'
 
     # User Name
     title = db.Column(db.String(50), nullable=False)
@@ -27,3 +27,18 @@ class Blog(Base):
 
     def __repr__(self):
         return f'[Blog {self.title}]'
+
+    def save(self):
+        """
+        Save that model into the db
+        params:
+            self
+        returns:
+            The created article
+        """
+
+        article = Blog(self.title, self.body)
+        db.session.add(article)
+        db.session.commit()
+
+        return article
