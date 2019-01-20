@@ -28,6 +28,21 @@ class Blog(Base):
     def __repr__(self):
         return f'[Blog {self.title}]'
 
+    def remove(self):
+        """
+        Remove this model from the db
+        params:
+            self
+        returns:
+            the removed article
+        """
+
+        this = self
+        db.session.delete(this)
+        db.session.commit()
+
+        return self
+
     def save(self):
         """
         Save that model into the db
@@ -37,8 +52,7 @@ class Blog(Base):
             The created article
         """
 
-        article = Blog(self.title, self.body)
-        db.session.add(article)
+        db.session.add(self)
         db.session.commit()
 
-        return article
+        return self

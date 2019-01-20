@@ -52,8 +52,9 @@ def index(page=1):
     returns:
         render_template(blog/index.html)
     """
-    offset = 50 * (page - 1)
+    limit = 10
+    offset = limit * (page - 1)
     articles = Blog.query.order_by(desc(Blog.date_modified))\
-        .offset(offset).limit(20)
+        .offset(offset).limit(limit)
 
     return render_template('blog/index.html', articles=articles)

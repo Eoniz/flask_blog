@@ -1,6 +1,12 @@
 from app.mod_blog.models import Blog
 import pytest
 from app import app
+import string
+import random
+
+
+def id_generator(size=10, chars=string.ascii_letters + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
 
 
 @pytest.fixture
@@ -38,13 +44,32 @@ def test_adding_article_db():
     WHEN a new blog is added to the db
     THEN check the title and description are defined correctly from the DB
     """
-    added_blog = Blog("New Article", "Article's description").save()
+    id = id_generator()
+    added_blog = Blog(f"New Article {id}", "Article's description").save()
     
-    blog = Blog.query.filter_by(title="New Article").first()
+    blog = Blog.query.filter_by(title=f"New Article {id}").first()
 
     assert added_blog.id == blog.id
     assert added_blog.title == blog.title
     assert added_blog.body == blog.body
     assert added_blog.date_created == blog.date_created
     assert added_blog.date_modified == blog.date_modified
+
+
+def test_removing_article_db():
+    """
+    GIVEN a Blog Model
+    WHEN a blog article is removed from the db
+    THEN check the article is no more in the db
+    """
+
+    id = id_generator()
+    added_blog = Blog(f"Article being removed {id}", "Article's description")\
+        .save()
+    added_blog.remove()
+
+    removed_blog = Blog.query.filter_by(title=f"Article being removed {id}")\
+        .first()
+
+    assert removed_blog is None
 
