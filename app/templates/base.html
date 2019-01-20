@@ -32,6 +32,18 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/about">Contact</a>
                             </li>
+                            {% if 'user_id' in session %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/write">New Article</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/auth/logout">Logout</a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/auth/login">Login</a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>

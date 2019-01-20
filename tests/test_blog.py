@@ -55,6 +55,8 @@ def test_adding_article_db():
     assert added_blog.date_created == blog.date_created
     assert added_blog.date_modified == blog.date_modified
 
+    added_blog.remove()
+
 
 def test_removing_article_db():
     """

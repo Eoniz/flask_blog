@@ -2,11 +2,14 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12">
         {% for article in articles %}
             <div class="article">
                 <div class="article-header">
                     <h1>{{ article.title }}</h1>
+                    {% if 'user_id' in session %}
+                        <a href="/delete/{{ article.id }}" class="btn btn-danger">Delete</a>
+                    {% endif %}
                 </div>
                 <hr />
                 <span>Posted on {{ article.date_created | format_date }}</span>
@@ -14,9 +17,6 @@
                 <p>{{ article.body }}</p>
             </div>
         {% endfor %}
-    </div>
-    <div class="col-md-4">
-        <h1>World</h1>
     </div>
 </div>
 {% endblock %}

@@ -13,13 +13,12 @@ def login():
     form = LoginForm(request.form)
 
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(email=form.email.data.lower()).first()
 
         if user and check_password_hash(user.password, form.password.data):
             session['user_id'] = user.id
-
-            flash(f'You are now connected as {user.name}')
-            return redirect(url_for('auth.home'))
+            
+            return redirect('/')
 
         flash(f'Wrong email or password', 'danger')
     else:
@@ -27,4 +26,10 @@ def login():
 
     return render_template('auth/signin.html', form=form)
 
+
+@mod_auth.route('/logout')
+def logout():
+    session.pop('user_id', None)
+
+    return redirect('/')
 

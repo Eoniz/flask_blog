@@ -1,7 +1,8 @@
-from flask import Blueprint, flash, redirect, render_template
+from flask import Blueprint, flash, request, redirect, render_template
 from sqlalchemy import desc
 from app.mod_blog.models import Blog
 from app import app, route
+from app.mod_blog.forms import WriteArticle
 
 mod_blog = Blueprint('blog', __name__, url_prefix='/')
 
@@ -61,3 +62,28 @@ def index(page=1, limit=10):
         .offset(offset).limit(limit)
 
     return render_template('blog/index.html', articles=articles)
+
+
+@mod_blog.route('/write', methods=['GET', 'POST'])
+@mod_blog.route('/write/', methods=['GET', 'POST'])
+def write():
+    form = WriteArticle(request.form)
+
+    if form.validate_on_submit():
+        blog = Blog(form.title.data, form.content.data)
+        blog.save()
+
+        return redirect('/')
+
+    return render_template('blog/write.html', form=form)
+
+
+@route('/delete/<int:id>')
+def delete_by_id(id):
+    article = Blog.query.filter_by(id=id).first()
+
+    if article is not None:
+        article.remove()
+
+    return redirect('/')
+
